@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace VersionControl_Part2
 {
-    internal class Program
+    public class Program
     {
         private static Random _rand = new Random();
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var active = true;
             while (active)
@@ -18,32 +19,50 @@ namespace VersionControl_Part2
                 PrintMenu();
                 var input = Console.ReadLine();
 
-                switch (input)
+                if(input == "q" || input == "Q")
                 {
-                    case "1":
-                        RandomInteger();
-                        break;
-                    case "2":
-                        TodaysDate();
-                        break;
-                    case "3":
-                        RandomDinosaur();
-                        break;
-                    case "4":
-                        RandomStringMod();
-                        break;
-                    case "q":
-                    case "Q":
-                        active = false;
-                        break;
-                    default:
-                        Console.WriteLine("Invalid entry, please try again");
-                        break;
+                    active = false;
+                    Console.WriteLine("GOODBYE");
+                    break;
+                }
+                else
+                {
+                    Input(input);
                 }
             }
         }
 
-        static void PrintMenu()
+        public static bool Input(string input)
+        {
+            var valid = false;
+
+            switch (input)
+            {
+                case "1":
+                    valid = true;
+                    Console.WriteLine($"Your random number is: {RandomInteger()}");
+                    break;
+                case "2":
+                    valid = true;
+                    Console.WriteLine(TodaysDate());
+                    break;
+                case "3":
+                    valid = true;
+                    Console.WriteLine(RandomDinosaur());
+                    break;
+                case "4":
+                    valid = true;
+                    Console.WriteLine(RandomStringMod());
+                    break;
+                default:
+                    valid = false;
+                    Console.WriteLine("Invalid entry, please try again");
+                    break;
+            }
+            return valid;
+        }
+
+        public static void PrintMenu()
         {
             Console.WriteLine();
             Console.WriteLine("-------------------------");
@@ -56,69 +75,70 @@ namespace VersionControl_Part2
             Console.WriteLine("-------------------------");
         }
 
-        static void RandomInteger()
+        public static int RandomInteger()
         {
-            Console.WriteLine($"Your random number is: {_rand.Next(1,11)}");
+           return _rand.Next(1,11);
         }
 
-        static void TodaysDate()
+        public static string TodaysDate()
         {
-            Console.WriteLine($"Today's date is: {DateTime.Now.ToShortDateString()}");
+            return $"Today's date is: {DateTime.Now.ToShortDateString()}";
         }
 
-        static void RandomDinosaur()
+        public static string RandomDinosaur()
         {
             var dinos = new List<string> { "Austrosaurus", "Changyuraptor", "Dilophosaurus", "Koreaceratops", "Pararhabdodon",
             "Nanosaurus", "Dongyangopelta", "Vespersaurus", "Normanniasaurus", "Chromogisaurus"};
             var orderedDinos = dinos.OrderBy(d => d).ToList();
 
-            Console.WriteLine($"Random dinosaur: {orderedDinos[_rand.Next(0,10)]}");
+            return $"Random dinosaur: {orderedDinos[_rand.Next(0,10)]}";
         }
 
-        static void RandomStringMod()
+        public static string RandomStringMod()
         {
-            Console.Write("Enter a random string: ");
-            var entry = Console.ReadLine();
-            
-            switch(_rand.Next(0, 10))
+            try
             {
-                case 0: 
-                    Console.WriteLine($"ToUpper: {entry.ToUpper()}");
-                    break;
-                case 1:
-                    Console.WriteLine($"ToLower: {entry.ToLower()}");
-                    break;
-                case 2:
-                    Console.WriteLine($"Reverse: {string.Concat(Enumerable.Reverse(entry))}");
-                    break;
-                case 3:
-                    if(entry.Length > 2)
-                    {
-                        Console.WriteLine($"Substrting - 2: {entry.Substring(entry.Length - 2)}");
-                    }
-                    else
-                    {
-                        Console.WriteLine("To short of string to substring");
-                    }
-                    break;
-                case 4:
-                    Console.WriteLine($"Length: {entry.Length}");
-                    break;
-                case 5:
-                    Console.WriteLine($"Append an A: {entry.Append('A')}");
-                    break;
-                case 6:
-                    Console.WriteLine($"Hash code: {entry.GetHashCode()}");
-                    break;
-                case 7:
-                    Console.WriteLine($"Contains an e: {entry.Contains('e')}");
-                    break;
-                case 8:
-                    Console.WriteLine($"First index of an e: {entry.IndexOf('e')}");
-                    break;
-                case 9:
-                    Console.WriteLine($"All E replaced with 3: {entry.Replace("e", "3")}");
-                    break;
+                Console.Write("Enter a random string: ");
+                var entry = Console.ReadLine();
+
+                switch (_rand.Next(0, 10))
+                {
+                    case 0:
+                        return $"ToUpper: {entry.ToUpper()}";
+                    case 1:
+                        return $"ToLower: {entry.ToLower()}";
+                    case 2:
+                        return $"Reverse: {string.Concat(Enumerable.Reverse(entry))}";
+                    case 3:
+                        if (entry.Length > 2)
+                        {
+                            return $"Substrting - 2: {entry.Substring(entry.Length - 2)}";
+                        }
+                        else
+                        {
+                            return "To short of string to substring";
+                        }
+                    case 4:
+                        return $"Length: {entry.Length}";
+                    case 5:
+                        return $"Append an A: {entry.Append('A')}";
+                    case 6:
+                        return $"Hash code: {entry.GetHashCode()}";
+                    case 7:
+                        return $"Contains an e: {entry.Contains('e')}";
+                    case 8:
+                        return $"First index of an e: {entry.IndexOf('e')}";
+                    case 9:
+                        return $"All E replaced with 3: {entry.Replace("e", "3")}";
+                    default:
+                        return "ERROR";
+                }
+            }
+            catch(Exception e) 
+            { 
+                Console.WriteLine(e.ToString());
+                
+                return null;
             }
         }
     }
